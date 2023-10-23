@@ -48,7 +48,47 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: AppConstant.aBgBrown,
         automaticallyImplyLeading: false,
       ),
-      body: ListView(),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: SizedBox(
+          height: 70,
+          width: AppConstant.aWidth,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      Title(
+                          color: AppConstant.aBgDark,
+                          child: const Text(
+                            'Title',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )),
+                      Title(
+                          color: AppConstant.aBgDark,
+                          child: const Text(
+                            'Description',
+                            style: TextStyle(fontWeight: FontWeight.w900),
+                          )),
+                      const Text(
+                        "school",
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          color: Colors.black,
+                        ),
+                      )
+                    ],
+                  ),
+                  IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(context,
