@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "592170846321",
+    "project_id": "bloc-todo-app-69e4b",
+    "storage_bucket": "bloc-todo-app-69e4b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592170846321:android:b4cbbdd7aa566bc057f3d0",
+        "android_client_info": {
+          "package_name": "com.example.todo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFOgHIVF4mhdmdEZDwjNMDIVxxdSuF2hk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
