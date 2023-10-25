@@ -18,9 +18,7 @@ class _AddTodoPageState extends State<AddTodoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Task', ),
-      ),
+      appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: ListView(
@@ -40,14 +38,6 @@ class _AddTodoPageState extends State<AddTodoPage> {
               textStyle: const TextStyle(
                   color: AppConstant.aBgDark, fontWeight: FontWeight.normal),
             ),
-             const HeightSpacer(height: 20),
-            CustomTextField(
-              hintText: 'Tags',
-              controller: desc,
-              keyboardType: TextInputType.text,
-              textStyle: const TextStyle(
-                  color: AppConstant.aBgDark, fontWeight: FontWeight.normal),
-            ),
             const HeightSpacer(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -55,7 +45,7 @@ class _AddTodoPageState extends State<AddTodoPage> {
                 CustomeOutlineBtn(
                   color: AppConstant.aBgBrown,
                   height: 50,
-                  text: 'Save',
+                  text: 'Update',
                   width: 70,
                   onTap: () {},
                 ),
