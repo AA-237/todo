@@ -1,17 +1,48 @@
-import '../../../common/models/todo_model.dart';
+part of 'todo_bloc.dart';
 
-abstract class TodoState{}
+enum TodoStatus { initial, loading, success, error }
 
-class InitialState extends TodoState{}
-
-class LoadingState extends TodoState{}
-
-class LoadedState extends TodoState{
+class TodoState extends Equatable {
   final List<TodoModel> todos;
-  LoadedState(this.todos);
-} 
+  final TodoStatus status;
 
-class ErrorState extends TodoState{
-  final String errorMessage;
-  ErrorState(this.errorMessage);
+  const TodoState({
+    this.todos = const [],
+    this.status = TodoStatus.initial,
+  });
+
+  TodoState copyWith({
+    List<TodoModel>? todos,
+    TodoStatus? status,
+  }) {
+    return TodoState(
+      todos: todos ?? this.todos,
+      status: status ?? this.status,
+    );
+  }
+
+  @override
+  factory TodoState.fromJson(Map<String, dynamic> json) {
+    try {
+      var listOfTodos = (json['todo'] as List<dynamic>)
+          .map((e) => TodoModel.fromJson(e as String))
+          .toList();
+      return TodoState(
+          todos: listOfTodos,
+          status: TodoStatus.values.firstWhere(
+              (element) => element.name.toString() == json['status']));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'todo': todos,
+      'status': status.name,
+    };
+  }
+
+  @override
+  List<Object?> get props => [todos, status];
 }

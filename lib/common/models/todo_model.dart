@@ -5,7 +5,7 @@ class TodoModel {
   final String title;
   final String desc;
   final int id;
-  final int isCompleted;
+   bool isCompleted;
   final String startDate;
   final String endDate;
 
@@ -23,7 +23,7 @@ class TodoModel {
     String? title,
     String? desc,
     int? id,
-    int? isCompleted,
+    bool? isCompleted,
     String? startDate,
     String? endDate,
   }) {
@@ -53,7 +53,7 @@ class TodoModel {
       map['title'] as String,
       map['desc'] as String,
       map['id'] as int,
-      map['isCompleted'] as int,
+      map['isCompleted'] as bool,
       map['startDate'] as String,
       map['endDate'] as String,
     );

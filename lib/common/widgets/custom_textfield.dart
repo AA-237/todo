@@ -11,6 +11,7 @@ class CustomTextField extends StatelessWidget {
     this.textStyle,
     this.controller,
     this.onchange,
+    this.icon,
   });
 
   final TextInputType? keyboardType;
@@ -18,6 +19,7 @@ class CustomTextField extends StatelessWidget {
   final Widget? prefixIcon;
   final TextStyle? textStyle;
   final TextEditingController? controller;
+  final Widget? icon;
   void Function(String)? onchange;
 
   @override
@@ -30,19 +32,9 @@ class CustomTextField extends StatelessWidget {
           Radius.circular(AppConstant.aRadius),
         ),
       ),
-      child: TextFormField(
-        controller: controller,
-        keyboardType: keyboardType,
-        cursorHeight: 20,
-        onChanged: onchange,
-        decoration: InputDecoration(
-          hintText: hintText,
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide:
-                  const BorderSide(color: AppConstant.aBgDark, width: 0.5)),
-        ),
-      ),
+      child: Row(
+        
+      )
     );
   }
 }

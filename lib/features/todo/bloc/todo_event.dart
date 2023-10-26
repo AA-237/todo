@@ -1,17 +1,43 @@
-import '../../../common/models/todo_model.dart';
+part of 'todo_bloc.dart';
 
-abstract class TodoEvents {
-  const TodoEvents();
+@immutable
+abstract class TodoEvent extends Equatable{
+  const TodoEvent();
+
+  @override
+  List<Object?> get props => [];
 }
 
-class TitleEvent extends TodoEvents {
-  final String title;
+class TodoStarted extends TodoEvent{}
 
-  TitleEvent(this.title);
+class AddTodo extends TodoEvent{
+  final TodoModel todo;
+
+  const AddTodo(this.todo);
+  @override
+  List<Object?> get props => [todo];
 }
 
-class DescriptionEvent extends TodoEvents {
-  final String desc;
+class DeleteTodo extends TodoEvent{
+  final TodoModel todo;
 
-  DescriptionEvent(this.desc);
+  const DeleteTodo(this.todo);
+  @override
+  List<Object?> get props => [todo];
+}
+
+class UpdateTodo extends TodoEvent{
+  final TodoModel todo;
+
+  const UpdateTodo(this.todo);
+  @override
+  List<Object?> get props => [todo];
+}
+
+class IsCompltetedTodo extends TodoEvent{
+  final int index;
+
+  const IsCompltetedTodo(this.index);
+  @override
+  List<Object?> get props => [index];
 }

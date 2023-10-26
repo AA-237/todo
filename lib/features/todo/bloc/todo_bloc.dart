@@ -1,35 +1,109 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo/features/todo/bloc/todo_event.dart';
-import 'package:todo/features/todo/bloc/todo_state.dart';
+import 'package:equatable/equatable.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:meta/meta.dart';
 
 import '../../../common/models/todo_model.dart';
 
+part 'todo_event.dart';
+part 'todo_state.dart';
 
-// class TodoBloc extends Bloc<TodoEvent, TodoState> {
-//  final List<Todo> todos = [];
+class TodoBloc extends HydratedBloc<TodoEvent, TodoState> {
+  TodoBloc() : super(const TodoState()) {
+    on<TodoStarted>(_started);
+    on<AddTodo>(_addTodo);
+    on<DeleteTodo>(_deleteTodo);
+    on<UpdateTodo>(_updateTodo);
+    on<IsCompltetedTodo>(_isCompleted);
+  }
 
-//   TodoBloc(super.initialState);
+  void _started(
+    TodoStarted event,
+    Emitter<TodoState> emit,
+  ) {
+    // looks for states that are sucess and return them
+    if (state.status == TodoStatus.success) return;
+    emit(
+      state.copyWith(todos: state.todos, status: TodoStatus.success),
+    );
+  }
 
-// //  @override
-// //  TodoState get initialState => InitialState();
+  void _addTodo(
+    AddTodo event,
+    Emitter<TodoState> emit,
+  ) {
+    if (state.status == TodoStatus.loading) return;
+    emit(state.copyWith(
+      status: TodoStatus.loading,
+    ));
+    try {
+      List<TodoModel> items = []; // temporal list to store todo
+      items.addAll(state.todos);
+      items.insert(0, state.todos as TodoModel);
+      emit(state.copyWith(todos: items, status: TodoStatus.success));
+    } catch (e) {
+      emit(state.copyWith(
+        status: TodoStatus.error,
+      ));
+    }
+  }
 
-//  Stream<TodoState> mapEventToState(TodoEvent event) async* {
-//   if (event is AddTodo) {
-//     todos.add(event.todo);
-//     yield LoadedState(todos);
-//   } else if (event is UpdateTodo) {
-//     int index = todos.indexWhere((todo) => todo.id == event.id);
-//     todos[index] = event.todo;
-//     yield LoadedState(todos);
-//   } else if(event is DeleteTodo) {
-//     todos.removeWhere((todo) => todo.id == event.todo.id);
-//     yield LoadedState(todos);
-//   }
-//  }
-// }
+  void _deleteTodo(
+    DeleteTodo event,
+    Emitter<TodoState> emit,
+  ) {
+    emit(state.copyWith(status: TodoStatus.loading));
+    try {
+      state.todos.remove(event.todo);
+      emit(state.copyWith(todos: state.todos, status: TodoStatus.success));
+    } catch (e) {
+      emit(state.copyWith(status: TodoStatus.error));
+    }
+  }
 
+  void _isCompleted(
+    IsCompltetedTodo event,
+    Emitter<TodoState> emit,
+  ) {
+    emit(state.copyWith(status: TodoStatus.loading));
+    try {
+      state.todos[event.index].isCompleted =
+          !state.todos[event.index].isCompleted;
+      emit(state.copyWith(todos: state.todos, status: TodoStatus.success));
+    } catch (e) {
+      emit(state.copyWith(status: TodoStatus.error));
+    }
+  }
 
-// class TodoBlocs extends Bloc<TodoEvent, TodoState> {
-//   TodoBlocs() : super(TodoState())
-  
-// }
+  void _updateTodo(
+    UpdateTodo event,
+    Emitter<TodoState> emit,
+  ) {
+    if (state.status == TodoStatus.loading) return;
+    emit(state.copyWith(
+      status: TodoStatus.loading,
+    ));
+    try {
+      List<TodoModel> items = []; // temporal list to store todo
+      items.addAll(state.todos);
+      int indexToUpdate = items.indexWhere((todo) => todo.id == event.todo.id);
+      if (indexToUpdate != -1) {
+        items[indexToUpdate] = event.todo;
+      }
+      emit(state.copyWith(todos: items, status: TodoStatus.success));
+    } catch (e) {
+      emit(state.copyWith(
+        status: TodoStatus.error,
+      ));
+    }
+  }
+
+  @override
+  TodoState? fromJson(Map<String, dynamic> json) {
+    return TodoState.fromJson(json);
+  }
+
+  @override
+  Map<String, dynamic>? toJson(TodoState state) {
+    return state.toJson();
+  }
+}

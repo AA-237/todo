@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo/common/utils/constants.dart';
 import 'package:todo/common/widgets/width.dart';
+import 'package:todo/features/todo/bloc/todo_bloc.dart';
 import 'package:todo/features/todo/pages/add_todo.dart';
 
 class HomePage extends StatefulWidget {
@@ -50,44 +52,55 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: SizedBox(
-          height: 70,
-          width: AppConstant.aWidth,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    children: [
-                      Title(
-                          color: AppConstant.aBgDark,
-                          child: const Text(
-                            'Title',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          )),
-                      Title(
-                          color: AppConstant.aBgDark,
-                          child: const Text(
-                            'Description',
-                            style: TextStyle(fontWeight: FontWeight.w900),
-                          )),
-                      const Text(
-                        "school",
-                        style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          color: Colors.black,
-                        ),
-                      )
-                    ],
-                  ),
-                  IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
-                ],
-              ),
-            ],
-          ),
-        ),
+        child: BlocBuilder<TodoBloc, TodoState>(builder: (context, state) {
+          if (state.status == TodoStatus.success) {
+            return Container();
+          } else if (state.status == TodoStatus.initial) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return Container();
+          }
+        }),
+        // child: SizedBox(
+        //   height: 70,
+        //   width: AppConstant.aWidth,
+        //   child: Column(
+        //     crossAxisAlignment: CrossAxisAlignment.start,
+        //     children: [
+        //       Row(
+        //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //         children: [
+        //           Column(
+        //             children: [
+        //               Title(
+        //                   color: AppConstant.aBgDark,
+        //                   child: const Text(
+        //                     'Title',
+        //                     style: TextStyle(fontWeight: FontWeight.bold),
+        //                   )),
+        //               Title(
+        //                   color: AppConstant.aBgDark,
+        //                   child: const Text(
+        //                     'Description',
+        //                     style: TextStyle(fontWeight: FontWeight.w900),
+        //                   )),
+        //               const Text(
+        //                 "school",
+        //                 style: TextStyle(
+        //                   fontWeight: FontWeight.normal,
+        //                   color: Colors.black,
+        //                 ),
+        //               )
+        //             ],
+        //           ),
+        //           IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
+        //         ],
+        //       ),
+        //     ],
+        //   ),
+        // ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
