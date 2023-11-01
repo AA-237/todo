@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo/common/utils/constants.dart';
+import 'package:todo/common/widgets/width.dart';
 
 // ignore: must_be_immutable
 class CustomTextField extends StatelessWidget {
@@ -33,7 +34,26 @@ class CustomTextField extends StatelessWidget {
         ),
       ),
       child: Row(
-        
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(child: icon,),
+         const WidthSpacer(wid: 20),
+          Expanded(
+            child: TextFormField(
+                    controller: controller,
+                    keyboardType: keyboardType,
+                    cursorHeight: 15,
+                    onChanged: onchange,
+                    decoration: InputDecoration(
+            hintText: hintText,
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide:
+                    const BorderSide(color: AppConstant.aBgDark, width: 0.5)),
+                    ),
+                  ),
+          ),
+        ],
       )
     );
   }

@@ -5,6 +5,11 @@ import 'package:todo/common/widgets/width.dart';
 import 'package:todo/features/todo/bloc/todo_bloc.dart';
 import 'package:todo/features/todo/pages/add_todo.dart';
 
+import '../../../common/models/todo_model.dart';
+import '../../../common/widgets/custom_textfield.dart';
+import '../../../common/widgets/height_spacer.dart';
+import '../../../common/widgets/reusable_btn.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -14,6 +19,18 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
+
+  addTodo(TodoModel todo) {
+    context.read<TodoBloc>().add(AddTodo(todo));
+  }
+
+  deletTodo(TodoModel todo) {
+    context.read<TodoBloc>().add(AddTodo(todo));
+  }
+
+  updateTodo(TodoModel todo) {
+    context.read<TodoBloc>().add(UpdateTodo(todo));
+  }
 
   final List<Widget> _screens = [
     // TODO: Add a screens to be displayed
@@ -54,7 +71,22 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.all(20.0),
         child: BlocBuilder<TodoBloc, TodoState>(builder: (context, state) {
           if (state.status == TodoStatus.success) {
-            return Container();
+            return ListView.builder(
+                itemCount: state.todos.length,
+                
+                itemBuilder: (context, int i) {
+                  print(state.todos);
+                  return Card(
+                    color: Colors.amber,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    child: ListTile(
+                      title: Text(state.todos[i].title),
+                      subtitle: Text(state.todos[i].desc),
+                      
+                    ),
+                  );
+                });
           } else if (state.status == TodoStatus.initial) {
             return const Center(
               child: CircularProgressIndicator(),
@@ -63,49 +95,12 @@ class _HomePageState extends State<HomePage> {
             return Container();
           }
         }),
-        // child: SizedBox(
-        //   height: 70,
-        //   width: AppConstant.aWidth,
-        //   child: Column(
-        //     crossAxisAlignment: CrossAxisAlignment.start,
-        //     children: [
-        //       Row(
-        //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //         children: [
-        //           Column(
-        //             children: [
-        //               Title(
-        //                   color: AppConstant.aBgDark,
-        //                   child: const Text(
-        //                     'Title',
-        //                     style: TextStyle(fontWeight: FontWeight.bold),
-        //                   )),
-        //               Title(
-        //                   color: AppConstant.aBgDark,
-        //                   child: const Text(
-        //                     'Description',
-        //                     style: TextStyle(fontWeight: FontWeight.w900),
-        //                   )),
-        //               const Text(
-        //                 "school",
-        //                 style: TextStyle(
-        //                   fontWeight: FontWeight.normal,
-        //                   color: Colors.black,
-        //                 ),
-        //               )
-        //             ],
-        //           ),
-        //           IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
-        //         ],
-        //       ),
-        //     ],
-        //   ),
-        // ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const AddTodoPage()));
+          // Navigator.push(context,
+          //     MaterialPageRoute(builder: (context) => const AddTodoPage()));
+          customDailog(context);
         },
         backgroundColor: AppConstant.aBgBrown,
         child: const Icon(Icons.add),
@@ -142,5 +137,88 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  Future<dynamic> customDailog(BuildContext context) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          final TextEditingController title = TextEditingController();
+          final TextEditingController desc = TextEditingController();
+          final TextEditingController isCompleted = TextEditingController();
+          final TextEditingController end = TextEditingController();
+          final TextEditingController start = TextEditingController();
+          return AlertDialog(
+            title: const Text("Add Todo"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CustomTextField(
+                  icon: const Icon(Icons.abc),
+                  hintText: 'To do name',
+                  controller: title,
+                  keyboardType: TextInputType.text,
+                  textStyle: const TextStyle(
+                      color: AppConstant.aBgDark, fontWeight: FontWeight.bold),
+                ),
+                const HeightSpacer(height: 20),
+                CustomTextField(
+                  icon: const Icon(Icons.abc),
+                  hintText: 'Description',
+                  controller: desc,
+                  keyboardType: TextInputType.text,
+                  textStyle: const TextStyle(
+                      color: AppConstant.aBgDark,
+                      fontWeight: FontWeight.normal),
+                ),
+                const HeightSpacer(height: 20),
+                CustomTextField(
+                  icon: const Icon(Icons.abc),
+                  hintText: 'Tags',
+                  controller: desc,
+                  keyboardType: TextInputType.text,
+                  textStyle: const TextStyle(
+                      color: AppConstant.aBgDark,
+                      fontWeight: FontWeight.normal),
+                ),
+                const HeightSpacer(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    CustomeOutlineBtn(
+                      color: AppConstant.aBgBrown,
+                      height: 50,
+                      text: 'Cancel',
+                      width: 70,
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    CustomeOutlineBtn(
+                      color: AppConstant.aBgBrown,
+                      height: 50,
+                      text: 'Save',
+                      width: 70,
+                      onTap: () {
+                        addTodo(TodoModel(
+                          title: title.text,
+                          desc: desc.text,
+                          id: 1,
+                          isCompleted: false,
+                          startDate: start.text,
+                          endDate: end.text,
+                        ));
+                        // title.text = '';
+                        // desc.text = '';
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                )
+              ],
+            ),
+          );
+        });
   }
 }

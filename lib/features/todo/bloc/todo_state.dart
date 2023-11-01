@@ -25,7 +25,7 @@ class TodoState extends Equatable {
   factory TodoState.fromJson(Map<String, dynamic> json) {
     try {
       var listOfTodos = (json['todo'] as List<dynamic>)
-          .map((e) => TodoModel.fromJson(e as String))
+          .map((e) => TodoModel.fromJson(jsonEncode(e)))
           .toList();
       return TodoState(
           todos: listOfTodos,
